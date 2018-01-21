@@ -1,4 +1,4 @@
-# state-threading
+# with-state
 
 The with-state macro: when '->' isn't good enough.
 
