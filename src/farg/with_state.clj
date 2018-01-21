@@ -118,7 +118,7 @@
 (defmacro with-state
   "Threads a state variable as the first argument through all the expressions
   in body (like ->) but the state variable is named and taken from bindvec,
-  the state variable as rebound to the result of each expression (like as->),
+  the state variable is rebound to the result of each expression (like as->),
   and some common Clojure functions are redefined inside with-state to
   enable many common operations that can't be done with ->. with-state
   returns the value of the state variable when the last expression in body
