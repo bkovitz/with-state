@@ -1,4 +1,4 @@
-(defproject with-state "0.0.1-SNAPSHOT"
+(defproject farg/with-state "0.0.1-SNAPSHOT"
   :description
     "The with-state macro: when '->' isn't good enough."
   :url "https://github.com/bkovitz/state-threading"
