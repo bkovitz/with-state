@@ -96,11 +96,17 @@
           (fn [inside]
             (k `(throw (ex-info "Early return from with-state"
                                 {::return ~expr}))))))
-    ((is ~expr) ~@more)  ;; 'is' doesn't insert state
+    ((is ~@body) ~@more)  ;; 'is' doesn't insert state
       (pmatch-recur more
         (fn [inside]
           (k `(do
-                (clojure.test/is ~expr)
+                (clojure.test/is ~@body)
+                ~inside))))
+    ((throw ~@body) ~@more)  ;; 'throw' doesn't insert state
+      (pmatch-recur more
+        (fn [inside]
+          (k `(do
+                (throw ~@body)
                 ~inside))))
     (-- ~expr ~@more)
       (pmatch-recur more

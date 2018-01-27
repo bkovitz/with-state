@@ -82,7 +82,7 @@ For example, this expression:
     -- expr
       expr is not rewritten and the state variable is not bound to its result.
       This makes it easy to insert println statements or other statements
-      that you don't want to affect the state variable."
+      that you don't want to affect the state variable.
 
 ## License
 

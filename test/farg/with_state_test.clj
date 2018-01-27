@@ -94,3 +94,13 @@
              (update :result #(conj % (:n state)))
              (update :n inc))
            (update :result conj :done))))))
+
+(deftest test-throw
+  (is (thrown? IllegalArgumentException
+        (with-state [state :whatever]
+          (throw (IllegalArgumentException. "No implicit state arg here.")))))
+  (is (thrown? IllegalArgumentException
+        (with-state [state :whatever]
+          (when true
+            (throw (IllegalArgumentException.
+                     "No implicit state arg here 2.")))))))
