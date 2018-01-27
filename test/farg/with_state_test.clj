@@ -104,3 +104,24 @@
           (when true
             (throw (IllegalArgumentException.
                      "No implicit state arg here 2.")))))))
+
+(defn has-case-even [m e]
+  (with-state [m m]
+    (case e
+      1 (assoc :got 1)
+      2 (assoc :got 2))))
+
+(defn has-case-odd [m e]
+  (with-state [m m]
+    (case e
+      1 (assoc :got 1)
+      2 (assoc :got 2)
+      (assoc :got :nothing))))
+
+(deftest test-case
+  (let [m {:a 0}]
+    (is {:a 0 :got 1} (has-case-even m 1))
+    (is {:a 0 :got 2} (has-case-even m 2))
+    (is {:a 0 :got 1} (has-case-odd m 1))
+    (is {:a 0 :got 2} (has-case-odd m 2))
+    (is {:a 0 :got :nothing} (has-case-odd m 3))))

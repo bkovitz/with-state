@@ -25,6 +25,14 @@
                ~state
                ~bind-from))))
 
+(defn- rewrite-case [state e clauses]
+  `(case ~e
+     ~@(mapcat (fn [[a b :as clause]]
+                 (if (= 1 (count clause))
+                   [(with-state-body state (list a))]
+                   [a (with-state-body state (list b))]))
+               (partition 2 2 nil clauses))))
+
 (defn- with-state-body [state body]
   (pmatch-loop [body body, k identity]
     ()
@@ -108,6 +116,11 @@
           (k `(do
                 (throw ~@body)
                 ~inside))))
+    ((case ~e ~@clauses) ~@more) ;; e doesn't insert state but clauses do
+      (pmatch-recur more
+        (fn [inside]
+          (k `(let [~state ~(rewrite-case state e clauses)]
+                ~inside))))
     (-- ~expr ~@more)
       (pmatch-recur more
         (fn [inside]
@@ -178,6 +191,11 @@
       Executes exprs repeatedly as long as c is logical true. c is not
       rewritten. exprs are rewritten the same as any other with-state line.
 
+    (case e clauses ...)
+      e is not rewritten, and the test-constants of the clauses are not
+      rewritten. The result-exprs of the clauses are rewritten the same as
+      any other with-state line.
+
     (setq v expr)
       Rewrites expr as normal. expr is expected to return a pair [state x],
       where 'state' is the new value of the state variable and 'x' is the
@@ -189,7 +207,11 @@
     -- expr
       expr is not rewritten and the state variable is not bound to its result.
       This makes it easy to insert println statements or other statements
-      that you don't want to affect the state variable."
+      that you don't want to affect the state variable.
+
+    (is expr)
+    (throw expr)
+      These are not rewritten at all inside with-state."
   [bindvec & body]
   (when (not (and (vector? bindvec)
                 (= 2 (count bindvec))))
