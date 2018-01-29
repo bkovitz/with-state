@@ -120,8 +120,8 @@
 
 (deftest test-case
   (let [m {:a 0}]
-    (is {:a 0 :got 1} (has-case-even m 1))
-    (is {:a 0 :got 2} (has-case-even m 2))
-    (is {:a 0 :got 1} (has-case-odd m 1))
-    (is {:a 0 :got 2} (has-case-odd m 2))
-    (is {:a 0 :got :nothing} (has-case-odd m 3))))
+    (is (= {:a 0 :got 1} (has-case-even m 1)))
+    (is (= {:a 0 :got 2} (has-case-even m 2)))
+    (is (= {:a 0 :got 1} (has-case-odd m 1)))
+    (is (= {:a 0 :got 2} (has-case-odd m 2)))
+    (is (= {:a 0 :got :nothing} (has-case-odd m 3)))))
